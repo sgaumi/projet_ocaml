@@ -24,6 +24,11 @@ let () =
   (* Open file *)
   let graph = from_file infile in
 
+
+   (*NOS FONCTIONS*)
+  let graph = clone_nodes graph in
+
+
   (* Rewrite the graph that has been read. *)
   let () = write_file outfile graph in
 

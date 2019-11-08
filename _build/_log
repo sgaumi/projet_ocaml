@@ -23,14 +23,10 @@
 /home/commetud/GEI/OCaml/.opam/4.08.1/bin/ocamldep.opt -modules tools.ml > tools.ml.depends
 # Target: tools.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:tools.cmo, file:tools.ml, implem, ocaml, quiet }
 /home/commetud/GEI/OCaml/.opam/4.08.1/bin/ocamlc.opt -c -o tools.cmo tools.ml
-+ /home/commetud/GEI/OCaml/.opam/4.08.1/bin/ocamlc.opt -c -o tools.cmo tools.ml
-File "tools.ml", line 1:
-Error: The implementation tools.ml does not match the interface tools.cmi:
-       Values do not match:
-         val clone_nodes : ('a * 'b) list -> ('a * 'c list) list
-       is not included in
-         val clone_nodes : 'a Graph.graph -> 'b Graph.graph
-       File "tools.mli", line 4, characters 0-37: Expected declaration
-       File "tools.ml", line 7, characters 8-19: Actual declaration
-Command exited with code 2.
-# Compilation unsuccessful.
+# Target: graph.ml.depends, tags: { extension:ml, file:graph.ml, ocaml, ocamldep, quiet }
+/home/commetud/GEI/OCaml/.opam/4.08.1/bin/ocamldep.opt -modules graph.ml > graph.ml.depends # cached
+# Target: graph.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:graph.cmo, file:graph.ml, implem, ocaml, quiet }
+/home/commetud/GEI/OCaml/.opam/4.08.1/bin/ocamlc.opt -c -o graph.cmo graph.ml # cached
+# Target: ftest.byte, tags: { byte, dont_link_with, extension:byte, file:ftest.byte, link, ocaml, program, quiet }
+/home/commetud/GEI/OCaml/.opam/4.08.1/bin/ocamlc.opt graph.cmo gfile.cmo tools.cmo ftest.cmo -o ftest.byte
+# Compilation successful.
