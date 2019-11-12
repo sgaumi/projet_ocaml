@@ -26,7 +26,8 @@ let () =
 
 
    (*NOS FONCTIONS*)
-  let graph = clone_nodes graph in
+  
+  (* let graph = gmap (add_arc (gmap graph int_of_string) 1 4 5) string_of_int in *)
 
 
   (* Rewrite the graph that has been read. *)
