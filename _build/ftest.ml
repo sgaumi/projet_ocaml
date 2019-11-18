@@ -1,5 +1,6 @@
 open Tools
 open Gfile
+open Fordfulkerson
     
 let () =
 
@@ -26,7 +27,8 @@ let () =
 
 
    (*NOS FONCTIONS*)
-  let graph = clone_nodes graph in
+  
+   let graph = gmap (build_network (convert_tolabel (gmap graph int_of_string ))) string_of_int in
 
 
   (* Rewrite the graph that has been read. *)
