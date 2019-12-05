@@ -1,6 +1,6 @@
 ### Starting build.
-# Target: newtest.ml.depends, tags: { extension:ml, file:newtest.ml, ocaml, ocamldep, quiet }
-/home/commetud/GEI/OCaml/.opam/4.08.1/bin/ocamldep.opt -modules newtest.ml > newtest.ml.depends
+# Target: test_find_path.ml.depends, tags: { extension:ml, file:test_find_path.ml, ocaml, ocamldep, quiet }
+/home/commetud/GEI/OCaml/.opam/4.08.1/bin/ocamldep.opt -modules test_find_path.ml > test_find_path.ml.depends # cached
 # Target: fordfulkerson.mli.depends, tags: { extension:mli, file:fordfulkerson.mli, ocaml, ocamldep, quiet }
 /home/commetud/GEI/OCaml/.opam/4.08.1/bin/ocamldep.opt -modules fordfulkerson.mli > fordfulkerson.mli.depends # cached
 # Target: graph.mli.depends, tags: { extension:mli, file:graph.mli, ocaml, ocamldep, quiet }
@@ -17,12 +17,10 @@
 /home/commetud/GEI/OCaml/.opam/4.08.1/bin/ocamldep.opt -modules gfile.mli > gfile.mli.depends # cached
 # Target: gfile.cmi, tags: { byte, compile, extension:mli, file:gfile.mli, interf, ocaml, quiet }
 /home/commetud/GEI/OCaml/.opam/4.08.1/bin/ocamlc.opt -c -o gfile.cmi gfile.mli # cached
-# Target: newtest.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:newtest.cmo, file:newtest.ml, implem, ocaml, quiet }
-/home/commetud/GEI/OCaml/.opam/4.08.1/bin/ocamlc.opt -c -o newtest.cmo newtest.ml
+# Target: test_find_path.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:test_find_path.cmo, file:test_find_path.ml, implem, ocaml, quiet }
+/home/commetud/GEI/OCaml/.opam/4.08.1/bin/ocamlc.opt -c -o test_find_path.cmo test_find_path.ml # cached
 # Target: fordfulkerson.ml.depends, tags: { extension:ml, file:fordfulkerson.ml, ocaml, ocamldep, quiet }
-/home/commetud/GEI/OCaml/.opam/4.08.1/bin/ocamldep.opt -modules fordfulkerson.ml > fordfulkerson.ml.depends # cached
-# Target: fordfulkerson.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:fordfulkerson.cmo, file:fordfulkerson.ml, implem, ocaml, quiet }
-/home/commetud/GEI/OCaml/.opam/4.08.1/bin/ocamlc.opt -c -o fordfulkerson.cmo fordfulkerson.ml # cached
+/home/commetud/GEI/OCaml/.opam/4.08.1/bin/ocamldep.opt -modules fordfulkerson.ml > fordfulkerson.ml.depends
 # Target: gfile.ml.depends, tags: { extension:ml, file:gfile.ml, ocaml, ocamldep, quiet }
 /home/commetud/GEI/OCaml/.opam/4.08.1/bin/ocamldep.opt -modules gfile.ml > gfile.ml.depends # cached
 # Target: gfile.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:gfile.cmo, file:gfile.ml, implem, ocaml, quiet }
@@ -35,6 +33,8 @@
 /home/commetud/GEI/OCaml/.opam/4.08.1/bin/ocamldep.opt -modules tools.ml > tools.ml.depends # cached
 # Target: tools.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:tools.cmo, file:tools.ml, implem, ocaml, quiet }
 /home/commetud/GEI/OCaml/.opam/4.08.1/bin/ocamlc.opt -c -o tools.cmo tools.ml # cached
-# Target: newtest.byte, tags: { byte, dont_link_with, extension:byte, file:newtest.byte, link, ocaml, program, quiet }
-/home/commetud/GEI/OCaml/.opam/4.08.1/bin/ocamlc.opt graph.cmo gfile.cmo tools.cmo fordfulkerson.cmo newtest.cmo -o newtest.byte
+# Target: fordfulkerson.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:fordfulkerson.cmo, file:fordfulkerson.ml, implem, ocaml, quiet }
+/home/commetud/GEI/OCaml/.opam/4.08.1/bin/ocamlc.opt -c -o fordfulkerson.cmo fordfulkerson.ml
+# Target: test_find_path.byte, tags: { byte, dont_link_with, extension:byte, file:test_find_path.byte, link, ocaml, program, quiet }
+/home/commetud/GEI/OCaml/.opam/4.08.1/bin/ocamlc.opt graph.cmo gfile.cmo tools.cmo fordfulkerson.cmo test_find_path.cmo -o test_find_path.byte
 # Compilation successful.

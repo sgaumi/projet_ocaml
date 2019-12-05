@@ -43,15 +43,15 @@ let find_path graph id1 id2 =
         |(e,x) :: rest -> if(e == id && x != 0) then (e,x) else (find_in id rest)
         |[]  -> (-1,-1)
     in
-    let rec aux accu l = match l with 
-        |e1 :: rest -> if (find_in id2 e1.o_arcs) != (-1,-1) 
-                       then if(e1.sr != id1)
-                                 then aux ((find_in id2 e1.o_arcs) :: accu) rest 
-                                 else ((find_in id2 e1.o_arcs) :: accu)
-                       else aux accu rest
+    let rec aux accu tarte l idd = match l with 
+        |e1 :: rest -> if (find_in idd e1.o_arcs) != (-1,-1) 
+                       then (if(e1.sr != id1)
+                                 then aux ((find_in idd e1.o_arcs) :: accu) (e1::tarte) tarte e1.sr
+                                 else ((find_in idd e1.o_arcs) :: accu))
+                       else aux accu (e1::tarte) rest idd
         |[] -> []
     in
-    aux [] list_arcs
+    aux [] [] list_arcs id2
     
      
 
