@@ -8,6 +8,8 @@ type out_arc = (id * int)
 
 type arcs = {sr : id ; o_arcs : int out_arcs}
 
+type path = id list
+
 let convert_tolabel gr = gmap gr (function i -> {flow = 0; cap = i}) 
 
 let build_network gr = 
@@ -17,24 +19,23 @@ let build_network gr =
 	in 
 	e_fold gr add_arc_inv graph
 	
-(* *
+
 let find_path graph id1 id2 =
     let get_node_list = 
-        n_fold graph (function l id -> id::l  ) []
+        n_fold graph (function l id -> id::l ) []
      in
-     let rec find_arcs list_accu =
-        |id2 :: _ -> list_accu (* stop/trouvé*)
-        |e1 :: e2 :: rest -> match find_arc graph e1 e2 with
-                                |None -> find_arcs list_accu (e1 :: rest)  
-                                |Some x -> find_arcs ({src = e1 ; dest = e2 ; value = x } :: list_accu) (e2 :: rest)
-                                
-        |e::[] -> find_arcs 
+     let rec find_nodes accu id l = match l with
+		|[] -> accu
+		|e :: suite -> match find_arc graph e id with
+						|None -> find_node accu id suite
+						|Some x -> if (x == 0) then (find_node accu id suite) else (find_node (accu::e) e get_node_list)
+	in
+	find_nodes [id2] id1 get_node_list
 
-**)
   (*  assert false  *) 
   
 let find_path graph id1 id2 =
-    let get_node_list gr = 
+(*    let get_node_list gr = 
         n_fold gr (fun l id -> id::l  ) []
     in
         (*liste de chaque noeuds avec ses arcs sortants (et noeuds voisins)*)
@@ -56,19 +57,22 @@ let find_path graph id1 id2 =
     aux [] [] list_arcs id2
     
      
+*)
 
     (*  assert false  *) 
 
 (* runs the ford fulkerson algorithm on a graph and returns its maximum flow*)
-let ford_fulkerson graph id1 id2 = 
+
+let ford_fulkerson graph id1 id2 = assert false (*
         let chem = find_path (build_network graph) id1 id2
         in
         let min_f aux ch = match ch with
             |[] -> aux
-            |(e,f)::rest -> if(e < aux) then (min_f e rest) else (min_f aux rest)
+            |(e,f)::rest -> if(f < aux) then (min_f e rest) else (min_f aux rest)
         in
-        let aug_f gr1 f1 ch1= match  
-            |
+        let rec aug_f gr1 f1 ch1 = match ch1 with 
+            |[] -> []
+			|e::e2::suite -> aug_f (add_arc gr1 e e2 f1) f1 suite
         in
         let rec ford_ful gr f = match find_path (build_network (gr)) id1 id2 with
             |[] -> f
@@ -76,6 +80,6 @@ let ford_fulkerson graph id1 id2 =
         in
         ford_ful graph 0
 
-
+*)
 
 

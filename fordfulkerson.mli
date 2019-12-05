@@ -8,6 +8,8 @@ type out_arc = (id * int)
 
 type arcs = {sr : id ; o_arcs : int out_arcs}
 
+type path = id list
+
 
 (*  converts an int graph into a label graph *)
 val convert_tolabel : int graph -> label graph
