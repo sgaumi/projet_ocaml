@@ -35,7 +35,7 @@ let () =
    (*NOS FONCTIONS*)
   
    let graph = gmap (build_network (convert_tolabel (gmap graph int_of_string ))) string_of_int in
-  Printf.printf "%s %!" (affichage (find_path (gmap graph int_of_string) 0 5)) ;
+  Printf.printf "%s %!" (affichage (find_path (gmap graph int_of_string) 2 4)) ;
   (* Rewrite the graph that has been read. *)
   let () = write_file outfile graph in
 

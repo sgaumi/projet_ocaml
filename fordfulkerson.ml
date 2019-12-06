@@ -19,21 +19,25 @@ let build_network gr =
 	in 
 	e_fold gr add_arc_inv graph
 	
+	
+let get_node_list graph = 
+        n_fold graph (fun l id -> id::l ) []  
 
+
+(*  Trouve un chemin vers id2 mais pas a partir de id1*)
 let find_path graph id1 id2 =
-    let get_node_list = 
-        n_fold graph (function l id -> id::l ) []
-     in
-     let rec find_nodes accu id l = match l with
+     let rec find_nodes (accu:path) (id:id) (l:id list) = match l with
 		|[] -> accu
-		|e :: suite -> match find_arc graph e id with
-						|None -> find_node accu id suite
-						|Some x -> if (x == 0) then (find_node accu id suite) else (find_node (accu::e) e get_node_list)
+		|e :: suite -> match (find_arc graph e id) with
+						|None -> find_nodes accu id suite
+						|Some x -> if (x == 0) then (find_nodes accu id suite) 
+						    else ( 
+						    if(e == id1) then (id1::accu) else (find_nodes (e::accu) e (get_node_list graph)))
 	in
-	find_nodes [id2] id1 get_node_list
+	find_nodes [id2] id2 (get_node_list graph) 
 
-  (*  assert false  *) 
-  
+
+  (*
 let find_path graph id1 id2 =
 (*    let get_node_list gr = 
         n_fold gr (fun l id -> id::l  ) []
@@ -58,28 +62,32 @@ let find_path graph id1 id2 =
     
      
 *)
+*)
 
     (*  assert false  *) 
 
 (* runs the ford fulkerson algorithm on a graph and returns its maximum flow*)
 
-let ford_fulkerson graph id1 id2 = assert false (*
+(*      Il faut trouver un moyen d'augmenter le flow d'un type label graph *)
+let ford_fulkerson graph id1 id2 = 
         let chem = find_path (build_network graph) id1 id2
         in
-        let min_f aux ch = match ch with
+        let rec min_f (aux:int) (ch:path) = match ch with
             |[] -> aux
-            |(e,f)::rest -> if(f < aux) then (min_f e rest) else (min_f aux rest)
+        (*    |[a,b] -> match find_arc graph a b with
+                      |None -> aux
+                      |Some y -> if(y < aux) then (min_f y rest) else (min_f aux rest) *)
+            |e::rest -> match find_arc graph e (List.hd rest) with
+                        |None -> aux
+                        |Some x -> if(x.flow < aux) then (min_f x.flow rest) else (min_f aux rest)
         in
         let rec aug_f gr1 f1 ch1 = match ch1 with 
-            |[] -> []
-			|e::e2::suite -> aug_f (add_arc gr1 e e2 f1) f1 suite
+            |[] -> empty_graph
+			|e1::suite -> aug_f (add_arc gr1 e1 (List.hd suite) f1) f1 suite
         in
         let rec ford_ful gr f = match find_path (build_network (gr)) id1 id2 with
             |[] -> f
             |chemin -> ford_ful (aug_f gr (min_f 0 chemin) chemin) (f+(min_f 0 chemin)) 
         in
         ford_ful graph 0
-
-*)
-
 
