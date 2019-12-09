@@ -27,17 +27,21 @@ let () =
   (* Open file *)
   let graph = from_file infile in
 
-
+(*
     let rec affichage l = match l with
         |a :: rest -> (string_of_int a) ^ (affichage rest)
         |[] -> ""     
     in
    (*NOS FONCTIONS*)
+*)
+
 (*
   	let graph = gmap (build_network (convert_tolabel (gmap graph int_of_string ))) string_of_int in
  	Printf.printf "%s %!" (affichage (find_path (gmap graph int_of_string) 0 4)) ;
 
 *)
+
+(*
 	let graphh = gmap graph int_of_string in
 	(*let graph = build_network (convert_tolabel (gmap graph int_of_string )) in
 	let chemin = (find_path graph  _source _sink) in
@@ -47,7 +51,7 @@ let () =
 	Printf.printf "Flow %s %!\n" (string_of_int flow) ;
 *)
 
-
+*)
 
   (* Rewrite the graph that has been read. *)
   let () = write_file outfile graphhh in
