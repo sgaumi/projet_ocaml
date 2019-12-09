@@ -33,11 +33,24 @@ let () =
         |[] -> ""     
     in
    (*NOS FONCTIONS*)
-  
-   let graph = gmap (build_network (convert_tolabel (gmap graph int_of_string ))) string_of_int in
-  Printf.printf "%s %!" (affichage (find_path (gmap graph int_of_string) 2 4)) ;
+(*
+  	let graph = gmap (build_network (convert_tolabel (gmap graph int_of_string ))) string_of_int in
+ 	Printf.printf "%s %!" (affichage (find_path (gmap graph int_of_string) 0 4)) ;
+
+*)
+	let graphh = gmap graph int_of_string in
+	(*let graph = build_network (convert_tolabel (gmap graph int_of_string )) in
+	let chemin = (find_path graph  _source _sink) in
+	let flow = (min_f graph 900 chemin) in *)
+	let graphhh = gmap (aug_f graphh 10 [0;3;2;4]) string_of_int in
+	(*Printf.printf "Chemin %s %!\n" (affichage chemin) ;
+	Printf.printf "Flow %s %!\n" (string_of_int flow) ;
+*)
+
+
+
   (* Rewrite the graph that has been read. *)
-  let () = write_file outfile graph in
+  let () = write_file outfile graphhh in
 
   () 
 

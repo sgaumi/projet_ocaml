@@ -24,5 +24,11 @@ val build_network : label graph -> int graph
 val find_path : int graph -> id -> id -> path
 
 
+val min_f : int graph -> int -> path -> int 
+
+
+val aug_f : int graph -> int -> path -> int graph
+
+
 (* runs the ford fulkerson algorithm on a graph and returns its maximum flow*)
 val ford_fulkerson : label graph -> id -> id -> int
