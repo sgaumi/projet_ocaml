@@ -12,8 +12,6 @@ type path = id list
 
 let convert_tolabel gr = gmap gr (function i -> {flow = 0; cap = i}) 
 
-let convert_tolabelbis gr = 
-
 let build_network gr = 
 	let graph = gmap gr (function (r:label) -> (r.cap - r.flow))
 	in
@@ -47,34 +45,27 @@ let rec min_f graph aux path = match path with
                         |Some x -> if(x < aux) then (min_f graph x (ee::rest)) else (min_f graph aux (ee::rest))
 
 
+let add_flow gr id1 id2 i = 
+    match find_arc gr id1 id2 with
+    |None -> raise Not_found
+    |Some x -> new_arc gr id1 id2 {flow = x.flow + i ; cap = x.cap} 
+
 let aug_f gr1 f1 ch1 =  
 	let rec add gr id1 id2 f ch= match ch with
-		|[] -> (add_arc gr id1 id2 0)
-		|e::[]-> (add_arc gr id1 id2 0)
-		|e1::e2::rest -> if e1 == id1 && e2 == id2 then (add_arc gr e2 e1 f) else (add gr id1 id2 f (e2::rest))
+		|[] -> Printf.printf "end of augmentation%!\n";(add_flow gr id1 id2 0);
+		|e::[]-> Printf.printf "end of augmentation%!\n"; (add_flow gr id1 id2 0);
+		|e1::e2::rest -> if e1 == id1 && e2 == id2 then (Printf.printf "augmenting arc %d %d of %d %!\n" e1 e2 f; add_flow gr e1 e2 f) else (add gr id1 id2 f (e2::rest));
 	in
 	let add_arc_f gr id1 id2 f = add gr id1 id2 f1 ch1 in
-	
-	let rec sub gr id1 id2 f ch = match ch with
-		|[] -> (add_arc gr id1 id2 0)
-		|e::[]-> (add_arc gr id1 id2 0)
-		|e1::e2::rest -> if e1 == id1 && e2 == id2 then (add_arc gr e1 e2 (-f)) else (sub gr id1 id2 f (e2::rest))
-	in
-	let sub_arc_f gr id1 id2 f = sub gr id1 id2 f1 ch1 in
-    let aux = e_fold gr1 (add_arc_f) gr1 in
-	e_fold aux (sub_arc_f) aux 
- 
+    e_fold gr1 (add_arc_f) gr1
 (* runs the ford fulkerson algorithm on a graph and returns its maximum flow*)
 
 (*      Il faut trouver un moyen d'augmenter le flow d'un type label graph *)
-let ford_fulkerson graph id1 id2 = 
-      let rec ford_rec gr flow = 
-        let inv_gr = (build_network gr) in
-        match find_path inv_gr id1 id2 with
-            |[] -> flow
-            |l -> (ford_rec (aug_f inv_gr (min_f inv_gr 800 l) l) (flow + (min_f inv_gr 800 l)))
-      in
-      ford_rec (convert_tolabel graph) 0 ;
+let rec ford_fulkerson graph id1 id2 flow = 
+      let gr_inv = build_network graph in match find_path gr_inv id1 id2 with
+            |[]-> Printf.printf "end of ford%!\n";(flow,graph)
+            |l -> Printf.printf "appel ford%!\n";(ford_fulkerson (aug_f graph (min_f gr_inv 800 l) l) id1 id2 (flow + (min_f gr_inv 800 l)))
+
       
       
       

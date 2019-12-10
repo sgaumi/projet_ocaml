@@ -27,34 +27,30 @@ let () =
   (* Open file *)
   let graph = from_file infile in
 
-(*
     let rec affichage l = match l with
         |a :: rest -> (string_of_int a) ^ (affichage rest)
         |[] -> ""     
     in
+    
+   let string_of_label (l:label) = (string_of_int l.flow)^"/"^(string_of_int l.cap) in
    (*NOS FONCTIONS*)
-*)
 
-(*
-  	let graph = gmap (build_network (convert_tolabel (gmap graph int_of_string ))) string_of_int in
- 	Printf.printf "%s %!" (affichage (find_path (gmap graph int_of_string) 0 4)) ;
 
-*)
+(*     Test des fonctions intermediaires         *)
 
-(*
-	let graphh = gmap graph int_of_string in
-	(*let graph = build_network (convert_tolabel (gmap graph int_of_string )) in
-	let chemin = (find_path graph  _source _sink) in
-	let flow = (min_f graph 900 chemin) in *)
-	let graphhh = gmap (aug_f graphh 10 [0;3;2;4]) string_of_int in
-	(*Printf.printf "Chemin %s %!\n" (affichage chemin) ;
-	Printf.printf "Flow %s %!\n" (string_of_int flow) ;
-*)
+	let graph1 = gmap graph int_of_string in
+	let graph2 = build_network (convert_tolabel graph1) in
+	let chemin = (find_path graph2  _source _sink) in
+	let flow = (min_f graph2 900 chemin) in
+	let graph3 = aug_f (convert_tolabel graph1) flow chemin in
+	let graph4 = gmap graph3 string_of_label in
+	Printf.printf "Chemin %s %!\n" (affichage chemin) ;
+	Printf.printf "Flow %d %!\n"  flow ;
 
-*)
+
 
   (* Rewrite the graph that has been read. *)
-  let () = write_file outfile graphhh in
+  let () = write_file outfile graph4 in
 
   () 
 

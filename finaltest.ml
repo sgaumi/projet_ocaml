@@ -24,16 +24,16 @@ let () =
   and _sink = int_of_string Sys.argv.(3)
   in
 
+  let string_of_label (l:label) = (string_of_int l.flow)^"/"^(string_of_int l.cap) in
+
   (* Open file *)
   let graph = from_file infile in
-
-
   let graph2 = convert_tolabel (gmap graph int_of_string) in
-
-  Printf.printf "Flow %s %!\n" (string_of_int (ford_fulkerson graph2 _source _sink)) ;
+  let (flow, graph3) = (ford_fulkerson graph2 _source _sink 0) in
+  Printf.printf "Flow %s %!\n" (string_of_int flow) ;
 
   (* Rewrite the graph that has been read. *)
-  (* let () = write_file outfile graph2 in
-*)
+  let () = write_file outfile (gmap graph3 string_of_label) in
+
   () 
 
