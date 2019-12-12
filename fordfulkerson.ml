@@ -1,5 +1,6 @@
 open Graph
 open Tools
+open Gfile
 
 (*  Type ratio *)
 type label =  {flow : int ; cap : int}
@@ -23,16 +24,30 @@ let build_network gr =
 let get_node_list graph = 
     n_fold graph (fun l id -> id::l ) []  
 
+let rec affichage l = match l with
+        |a :: rest -> (string_of_int a) ^"->"^ (affichage rest)
+        |[] -> ""     
+
 
 let find_path graph id1 id2 =
-    let rec find_nodes (accu:path) (id:id) (l:id list) = match l with
-		|[] -> []
-		|e :: suite -> match (find_arc graph id e) with
-						|None -> find_nodes accu id suite
-						|Some x -> if (x == 0) then (find_nodes accu id suite) 
-						 else (if(e == id2) then (id2::accu) else (find_nodes (e::accu) e (get_node_list graph)))
+    let rec find_nodes (accu:path) (id:id) (l: int out_arcs) =
+    Printf.printf "Appel find_path %s\n%!" (affichage accu);
+    if List.mem id accu then [] 
+    else (
+        match l with
+		    |[] -> []
+		    |(e,v) :: suite -> if v = 0 then (find_nodes accu id suite) 
+						       else (Printf.printf "Arc found \n%!"; 
+						       if e = id2 then (id2::id::accu) else (
+						                                    let result = (find_nodes (id::accu) e (out_arcs graph e)) in
+				                                            if result = [] 
+				                                            then find_nodes accu id suite
+				                                            else result
+				                                            )                         
+				                )
+	)
 	in
-	List.rev (find_nodes [id1] id1 (get_node_list graph) )
+	List.rev (find_nodes [] id1 (out_arcs graph id1) )
 
 
 
@@ -52,19 +67,24 @@ let add_flow gr id1 id2 i =
 
 let aug_f gr1 f1 ch1 =  
 	let rec add gr id1 id2 f ch= match ch with
-		|[] -> Printf.printf "end of augmentation%!\n";(add_flow gr id1 id2 0);
-		|e::[]-> Printf.printf "end of augmentation%!\n"; (add_flow gr id1 id2 0);
+		|[] -> Printf.printf "end of augmentation%!\n";gr
+		|e::[]-> Printf.printf "end of augmentation%!\n"; gr
 		|e1::e2::rest -> if e1 == id1 && e2 == id2 then (Printf.printf "augmenting arc %d %d of %d %!\n" e1 e2 f; add_flow gr e1 e2 f) else (add gr id1 id2 f (e2::rest));
 	in
 	let add_arc_f gr id1 id2 f = add gr id1 id2 f1 ch1 in
     e_fold gr1 (add_arc_f) gr1
 (* runs the ford fulkerson algorithm on a graph and returns its maximum flow*)
 
+
+let string_of_label (l:label) = (string_of_int l.flow)^"/"^(string_of_int l.cap)
 (*      Il faut trouver un moyen d'augmenter le flow d'un type label graph *)
-let rec ford_fulkerson graph id1 id2 flow = 
+let rec ford_fulkerson graph id1 id2 flow cmpt = 
+      write_file ("result"^string_of_int cmpt) (gmap graph string_of_label) ; 
       let gr_inv = build_network graph in match find_path gr_inv id1 id2 with
-            |[]-> Printf.printf "end of ford%!\n";(flow,graph)
-            |l -> Printf.printf "appel ford%!\n";(ford_fulkerson (aug_f graph (min_f gr_inv 800 l) l) id1 id2 (flow + (min_f gr_inv 800 l)))
+            |[]-> Printf.printf "end of ford%!\n";
+                    (flow,graph)
+            |l -> Printf.printf "Chemin complet %s  %d%!\n" (affichage l) cmpt;
+                    (ford_fulkerson (aug_f graph (min_f gr_inv 800 l) l) id1 id2 (flow + (min_f gr_inv 800 l)) (cmpt+1))
 
       
       

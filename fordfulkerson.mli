@@ -31,4 +31,4 @@ val aug_f : label graph -> int -> path -> label graph
 
 
 (* runs the ford fulkerson algorithm on a graph and returns its maximum flow*)
-val ford_fulkerson : label graph -> id -> id -> int -> (int*label graph)
+val ford_fulkerson : label graph -> id -> id -> int -> int-> (int*label graph)

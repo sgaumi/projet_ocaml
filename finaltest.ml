@@ -29,7 +29,7 @@ let () =
   (* Open file *)
   let graph = from_file infile in
   let graph2 = convert_tolabel (gmap graph int_of_string) in
-  let (flow, graph3) = (ford_fulkerson graph2 _source _sink 0) in
+  let (flow, graph3) = (ford_fulkerson graph2 _source _sink 0 0) in
   Printf.printf "Flow %s %!\n" (string_of_int flow) ;
 
   (* Rewrite the graph that has been read. *)
