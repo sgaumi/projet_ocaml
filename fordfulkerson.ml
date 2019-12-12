@@ -31,14 +31,13 @@ let rec affichage l = match l with
 
 let find_path graph id1 id2 =
     let rec find_nodes (accu:path) (id:id) (l: int out_arcs) =
-    Printf.printf "Appel find_path %s\n%!" (affichage accu);
     if List.mem id accu then [] 
     else (
         match l with
 		    |[] -> []
 		    |(e,v) :: suite -> if v = 0 then (find_nodes accu id suite) 
-						       else (Printf.printf "Arc found %d -> %d - %d\n%!" id e v; 
-						       if e = id2 then (id2::id::accu) else (
+						       else ( 
+						        if e = id2 then (id2::id::accu) else (
 						                                    let result = (find_nodes (id::accu) e (out_arcs graph e)) in
 				                                            if result = [] 
 				                                            then find_nodes accu id suite
@@ -69,36 +68,28 @@ let add_flow gr id1 id2 i =
 
 let aug_f gr1 f1 ch1 =  
 	let rec add gr id1 id2 f ch= match ch with
-		|[] -> Printf.printf "end of augmentation%!\n";gr
-		|e::[]-> Printf.printf "end of augmentation%!\n"; gr
-		|e1::e2::rest -> if e1 == id1 && e2 == id2 then (Printf.printf "augmenting arc %d %d of %d %!\n" e1 e2 f; add_flow gr e1 e2 f) else (add gr id1 id2 f (e2::rest));
+		|[] -> gr
+		|e::[]-> gr
+		|e1::e2::rest -> if e1 == id1 && e2 == id2 then ( add_flow gr e1 e2 f) else (add gr id1 id2 f (e2::rest))
 	in
 	let add_arc_f gr id1 id2 f = add gr id1 id2 f1 ch1 in
-	(*e_fold gr1 (add_arc_f) gr1*)
+
     let grrr = e_fold gr1 (add_arc_f) gr1 in
     
     let rec sub gr id1 id2 f ch= match ch with
-		|[] -> Printf.printf "end of diminution%!\n";gr
-		|e::[]-> Printf.printf "end of diminution%!\n"; gr
-		|e1::e2::rest -> if e1 == id2 && e2 == id1 then (Printf.printf "diminuting arc %d %d of %d %!\n" e2 e1 f; add_flow gr e2 e1 (-f)) else (sub gr id1 id2 f (e2::rest));
+		|[] -> gr
+		|e::[]-> gr
+		|e1::e2::rest -> if e1 == id2 && e2 == id1 then ( add_flow gr e2 e1 (-f)) else (sub gr id1 id2 f (e2::rest));
 	in
 	let sub_arc_f gr id1 id2 f = sub gr id1 id2 f1 ch1 in
     e_fold grrr (sub_arc_f) grrr
+
+
 (* runs the ford fulkerson algorithm on a graph and returns its maximum flow*)
-
-
-let string_of_label (l:label) = (string_of_int l.flow)^"/"^(string_of_int l.cap)
-(*      Il faut trouver un moyen d'augmenter le flow d'un type label graph *)
-let rec ford_fulkerson graph id1 id2 flow cmpt = 
-      write_file ("result"^string_of_int cmpt) (gmap graph string_of_label) ; 
+let rec ford_fulkerson graph id1 id2 flow = 
       let gr_inv = build_network graph in match find_path gr_inv id1 id2 with
-            |[]-> Printf.printf "end of ford%!\n";
-                    (flow,graph)
-            |l -> Printf.printf "Chemin complet %s  %d%!\n" (affichage l) cmpt;
-                    (ford_fulkerson (aug_f graph (min_f gr_inv 800 l) l) id1 id2 (flow + (min_f gr_inv 800 l)) (cmpt+1))
+            |[]-> (flow,graph)
+            |l -> (ford_fulkerson (aug_f graph (min_f gr_inv 800 l) l) id1 id2 (flow + (min_f gr_inv 800 l)))
 
-      
-      
-      
       
       
