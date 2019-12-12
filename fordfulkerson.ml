@@ -37,7 +37,7 @@ let find_path graph id1 id2 =
         match l with
 		    |[] -> []
 		    |(e,v) :: suite -> if v = 0 then (find_nodes accu id suite) 
-						       else (Printf.printf "Arc found \n%!"; 
+						       else (Printf.printf "Arc found %d -> %d - %d\n%!" id e v; 
 						       if e = id2 then (id2::id::accu) else (
 						                                    let result = (find_nodes (id::accu) e (out_arcs graph e)) in
 				                                            if result = [] 
@@ -63,7 +63,9 @@ let rec min_f graph aux path = match path with
 let add_flow gr id1 id2 i = 
     match find_arc gr id1 id2 with
     |None -> raise Not_found
-    |Some x -> new_arc gr id1 id2 {flow = x.flow + i ; cap = x.cap} 
+    |Some x -> new_arc gr id1 id2 {flow = x.flow + i ; cap = x.cap}
+    
+     
 
 let aug_f gr1 f1 ch1 =  
 	let rec add gr id1 id2 f ch= match ch with
@@ -72,7 +74,16 @@ let aug_f gr1 f1 ch1 =
 		|e1::e2::rest -> if e1 == id1 && e2 == id2 then (Printf.printf "augmenting arc %d %d of %d %!\n" e1 e2 f; add_flow gr e1 e2 f) else (add gr id1 id2 f (e2::rest));
 	in
 	let add_arc_f gr id1 id2 f = add gr id1 id2 f1 ch1 in
-    e_fold gr1 (add_arc_f) gr1
+	(*e_fold gr1 (add_arc_f) gr1*)
+    let grrr = e_fold gr1 (add_arc_f) gr1 in
+    
+    let rec sub gr id1 id2 f ch= match ch with
+		|[] -> Printf.printf "end of diminution%!\n";gr
+		|e::[]-> Printf.printf "end of diminution%!\n"; gr
+		|e1::e2::rest -> if e1 == id2 && e2 == id1 then (Printf.printf "diminuting arc %d %d of %d %!\n" e2 e1 f; add_flow gr e2 e1 (-f)) else (sub gr id1 id2 f (e2::rest));
+	in
+	let sub_arc_f gr id1 id2 f = sub gr id1 id2 f1 ch1 in
+    e_fold grrr (sub_arc_f) grrr
 (* runs the ford fulkerson algorithm on a graph and returns its maximum flow*)
 
 
