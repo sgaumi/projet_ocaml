@@ -1,12 +1,8 @@
 open Graph
 open Tools
 
-(*  Type label *)
+(*  Type label & path *)
 type label =  {flow : int ; cap : int}
-
-type out_arc = (id * int) 
-
-type arcs = {sr : id ; o_arcs : int out_arcs}
 
 type path = id list
 
@@ -18,7 +14,7 @@ val convert_tolabel : int graph -> label graph
 val build_network : label graph -> int graph
 
 
-(* returns a list of possible paths linking s -> t*)
+(* returns a path linking s -> t*)
 val find_path : int graph -> id -> id -> path
 
 

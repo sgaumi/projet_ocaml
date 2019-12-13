@@ -28,9 +28,14 @@ let () =
 
   (* Open file *)
   let graph = from_file infile in
+
+  (* Graph format conversion  *)
   let graph2 = convert_tolabel (gmap graph int_of_string) in
+
+  (* Run algorithm *)
   let (flow, graph3) = (ford_fulkerson graph2 _source _sink 0) in
-  Printf.printf "Flow %s %!\n" (string_of_int flow) ;
+  Printf.printf "Maximum Flow %d %!\n" flow ;
+  Printf.printf "cat %s to display resulting graph arcs and nodes \n%!" outfile ;
 
   (* Rewrite the graph that has been read. *)
   let () = write_file outfile (gmap graph3 string_of_label) in
